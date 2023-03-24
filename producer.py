@@ -6,7 +6,7 @@ class Producer:
         self.kafka_producer = KafkaProducer()
 
     def produce(self, event: str):
-        self.kafka_producer.send(self.topic, event.encode("utf-8"))
+        self.kafka_producer.send(self.topic, event.encode())
 
     def flush(self):
         self.kafka_producer.flush()

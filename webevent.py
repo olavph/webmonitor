@@ -1,0 +1,30 @@
+class WebEvent:
+    def __init__(self, url: str, status_code: int, response_time: float, match_found: bool, match: str):
+        self.url = url
+        self.status_code = int(status_code)
+        self.response_time = float(response_time)
+        self.match_found = bool(match_found)
+        self.match = match
+
+    def __str__(self):
+        return (f"URL: {self.url}, "
+                f"status code: {self.status_code}, "
+                f"response time: {self.response_time}, "
+                f"regexp match found: {self.match_found}, "
+                f"regexp match: {self.match}")
+
+    def to_tuple(self):
+        return (
+            self.url,
+            self.status_code,
+            self.response_time,
+            self.match_found,
+            self.match,
+        )
+
+    def encode(self):
+        return f"{self.url},{self.status_code},{self.response_time},{self.match_found},{self.match}".encode("utf-8")
+
+    @classmethod
+    def decode(cls, encoded_bytes: bytes):
+        return WebEvent(*encoded_bytes.decode("utf-8").split(","))
