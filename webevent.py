@@ -28,3 +28,11 @@ class WebEvent:
     @classmethod
     def decode(cls, encoded_bytes: bytes):
         return WebEvent(*encoded_bytes.decode("utf-8").split(","))
+
+    @classmethod
+    def db_fields(cls):
+        return ("url", "status_code", "response_time", "match_found", "match")
+
+    @classmethod
+    def db_types(cls):
+        return ("varchar", "integer", "real", "bool", "varchar")
