@@ -3,6 +3,7 @@
 import signal
 import sys
 
+from producer import Producer
 from webmonitor import WebMonitor
 
 MONITORED_WEBSITES = [
@@ -10,6 +11,7 @@ MONITORED_WEBSITES = [
     ("https://google.com/", r"\(.*?www.*?robot.*?\)"),
 ]
 LOOP_PERIOD_SECONDS = 5.0
+TOPIC_NAME = "web_monitor"
 
 
 def signal_handler(sig, frame):
@@ -18,7 +20,8 @@ def signal_handler(sig, frame):
 
 def main():
     signal.signal(signal.SIGINT, signal_handler)
-    monitor = WebMonitor(MONITORED_WEBSITES, LOOP_PERIOD_SECONDS)
+    producer = Producer(TOPIC_NAME)
+    monitor = WebMonitor(MONITORED_WEBSITES, LOOP_PERIOD_SECONDS, producer)
     monitor.run()
 
 
