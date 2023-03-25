@@ -7,7 +7,7 @@ from webevent.webevent import WebEvent
 class WebDownloader:
     def __init__(self, url: str, regexp_pattern: str):
         self.url = url
-        self.regexp = re.compile(regexp_pattern)
+        self.regexp = re.compile(regexp_pattern, re.MULTILINE | re.DOTALL)
 
     def produce_event(self):
         response = requests.get(self.url)

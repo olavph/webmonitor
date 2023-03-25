@@ -6,6 +6,15 @@ class WebEvent:
         self.match_found = bool(match_found)
         self.match = match
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        else:
+            return False
+
+    def __repr__(self):
+        return str(self.to_tuple())
+
     def __str__(self):
         return (f"URL: {self.url}, "
                 f"status code: {self.status_code}, "
