@@ -1,12 +1,12 @@
-from kafka import KafkaConsumer
 import psycopg2
+
+from webevent.consumer import Consumer
 
 
 class DBWriter:
-    def __init__(self, topic: str, db_name: str, table_name: str, event_type: type):
-        self.topic = topic
+    def __init__(self, consumer: Consumer, db_name: str, table_name: str, event_type: type):
+        self.consumer = consumer
         self._create_queries(table_name, event_type)
-        self.decode_function = event_type.decode
         self.connection = psycopg2.connect(f"dbname={db_name}")
         self.cursor = self.connection.cursor()
 
@@ -18,9 +18,7 @@ class DBWriter:
 
     def run(self):
         self._create_table()
-        consumer = KafkaConsumer(self.topic)
-        for msg in consumer:
-            event = self.decode_function(msg.value)
+        for event in self.consumer:
             self.cursor.execute(self.insert_query, event.to_tuple())
             print(f"Inserted {event}")
 

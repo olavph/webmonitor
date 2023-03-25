@@ -3,6 +3,7 @@
 import signal
 import sys
 
+from webevent.consumer import Consumer
 from webevent.dbwriter import DBWriter
 from webevent.webevent import WebEvent
 
@@ -17,7 +18,8 @@ def signal_handler(sig, frame):
 
 def main():
     signal.signal(signal.SIGINT, signal_handler)
-    writer = DBWriter(TOPIC_NAME, DB_NAME, TABLE_NAME, WebEvent)
+    consumer = Consumer(TOPIC_NAME)
+    writer = DBWriter(consumer, DB_NAME, TABLE_NAME, WebEvent)
     writer.run()
 
 
