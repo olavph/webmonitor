@@ -1,4 +1,7 @@
 #!/bin/env python3
+"""Start a WebMonitor that periodically downloads from a configured set
+of URLs sends events to a Kafka topic, until SIGINT is received.
+"""
 
 import signal
 import sys

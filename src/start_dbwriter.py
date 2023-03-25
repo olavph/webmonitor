@@ -1,4 +1,7 @@
 #!/bin/env python3
+"""Start a DBWriter that receives events from a Kafka topic and writes
+them to a PostgresSQL, until SIGINT is received.
+"""
 
 import signal
 import sys
