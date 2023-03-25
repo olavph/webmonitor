@@ -53,7 +53,7 @@ class TestStringMethods(TestCase):
             monitor.run()
 
         time_sleep.assert_called_once_with(sentinel.loop_period)
-        producer.produce.assert_called_once_with(sentinel.event)
+        producer.send.assert_called_once_with(sentinel.event)
 
 
     def test_webmonitor_run_produce_one_website_event_per_config(self, time_sleep, webdownloader):
@@ -70,8 +70,8 @@ class TestStringMethods(TestCase):
             monitor.run()
 
         time_sleep.assert_called_once_with(sentinel.loop_period)
-        producer.produce.assert_called_with(sentinel.event)
-        self.assertEqual(producer.produce.call_count, len(website_configs))
+        producer.send.assert_called_with(sentinel.event)
+        self.assertEqual(producer.send.call_count, len(website_configs))
 
 
     def test_webmonitor_run_produce_one_website_event_per_config_per_loop(self, time_sleep, webdownloader):
@@ -90,5 +90,5 @@ class TestStringMethods(TestCase):
 
         time_sleep.assert_called_with(sentinel.loop_period)
         self.assertEqual(time_sleep.call_count, len(sleeps))
-        producer.produce.assert_called_with(sentinel.event)
-        self.assertEqual(producer.produce.call_count, len(website_configs) * len(sleeps))
+        producer.send.assert_called_with(sentinel.event)
+        self.assertEqual(producer.send.call_count, len(website_configs) * len(sleeps))

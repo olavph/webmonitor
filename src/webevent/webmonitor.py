@@ -3,6 +3,7 @@ import time
 from webevent.producer import Producer
 from webevent.webdownloader import WebDownloader
 
+
 class WebMonitor:
     def __init__(self, website_configs: list, loop_period: float, producer: Producer):
         self.downloaders = list()
@@ -16,5 +17,5 @@ class WebMonitor:
             for downloader in self.downloaders:
                 event = downloader.produce_event()
                 print(event)
-                self.producer.produce(event)
+                self.producer.send(event)
             time.sleep(self.loop_period)
