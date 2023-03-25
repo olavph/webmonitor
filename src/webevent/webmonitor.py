@@ -1,7 +1,7 @@
 import time
 
-from producer import Producer
-from webdownloader import WebDownloader
+from webevent.producer import Producer
+from webevent.webdownloader import WebDownloader
 
 class WebMonitor:
     def __init__(self, website_configs: list, loop_period: float, producer: Producer):

@@ -1,7 +1,7 @@
 import re
 import requests
 
-from webevent import WebEvent
+from webevent.webevent import WebEvent
 
 
 class WebDownloader:

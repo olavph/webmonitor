@@ -3,8 +3,8 @@
 import signal
 import sys
 
-from producer import Producer
-from webmonitor import WebMonitor
+from webevent.producer import Producer
+from webevent.webmonitor import WebMonitor
 
 MONITORED_WEBSITES = [
     ("https://example.com/", r"example"),

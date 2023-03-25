@@ -3,8 +3,8 @@
 import signal
 import sys
 
-from dbwriter import DBWriter
-from webevent import WebEvent
+from webevent.dbwriter import DBWriter
+from webevent.webevent import WebEvent
 
 TOPIC_NAME = "web_monitor"
 DB_NAME = "mydb"
