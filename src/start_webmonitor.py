@@ -3,6 +3,7 @@
 of URLs sends events to a Kafka topic, until SIGINT is received.
 """
 
+import os
 import signal
 import sys
 
@@ -14,8 +15,9 @@ MONITORED_WEBSITES = [
     ("https://google.com/", r"\(.*?www.*?robot.*?\)"),
 ]
 LOOP_PERIOD_SECONDS = 5.0
-TOPIC_NAME = "web_monitor"
-
+KAFKA_HOST=os.getenv("KAFKA_HOST", "localhost")
+KAFKA_PORT=os.getenv("KAFKA_PORT", 9092)
+TOPIC_NAME = "webmonitor"
 
 def signal_handler(sig, frame):
     print("Stopping WebMonitor")
@@ -24,7 +26,7 @@ def signal_handler(sig, frame):
 def main():
     signal.signal(signal.SIGINT, signal_handler)
     print("Starting WebMonitor")
-    producer = Producer(TOPIC_NAME)
+    producer = Producer(KAFKA_HOST, KAFKA_PORT, TOPIC_NAME)
     monitor = WebMonitor(MONITORED_WEBSITES, LOOP_PERIOD_SECONDS, producer)
     monitor.run()
 

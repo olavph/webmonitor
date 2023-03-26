@@ -1,0 +1,81 @@
+---
+# Based on https://developer.confluent.io/quickstart/kafka-docker/
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.2
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+        test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/2181"]
+        interval: 1s
+        timeout: 1s
+        retries: 1
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: kafka
+    ports:
+    # To learn about configuring Kafka for access across networks see
+    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    healthcheck:
+        test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/9092"]
+        interval: 1s
+        timeout: 1s
+        retries: 1
+
+  postgres:
+    image: postgres:14.5
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: webmonitor
+    healthcheck:
+        test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/5432"]
+        interval: 1s
+        timeout: 1s
+        retries: 1
+
+  webmonitor:
+    image: webmonitor
+    container_name: webmonitor
+    command: ./src/start_webmonitor.py
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
+
+  dbwriter:
+    image: webmonitor
+    container_name: dbwriter
+    command: ./src/start_dbwriter.py
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
+      DB_HOST: postgres
+      DB_PORT: 5432

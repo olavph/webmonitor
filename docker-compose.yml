@@ -1,0 +1,20 @@
+---
+version: '3'
+services:
+  webmonitor:
+    image: webmonitor
+    container_name: webmonitor
+    command: ./src/start_webmonitor.py
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
+
+  dbwriter:
+    image: webmonitor
+    container_name: dbwriter
+    command: ./src/start_dbwriter.py
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 29092
+      DB_HOST: postgres
+      DB_PORT: 5432
