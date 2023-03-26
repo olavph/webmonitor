@@ -30,5 +30,4 @@ class WebMonitor:
                 event = downloader.produce_event()
                 print(event)
                 self.producer.send(event)
-            self.producer.flush()
             time.sleep(self.loop_period)

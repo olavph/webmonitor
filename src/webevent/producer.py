@@ -28,14 +28,9 @@ class Producer:
                 time.sleep(1)
 
     def send(self, event: WebEvent):
-        """Queue event to be sent to Consumers
+        """Send event to Consumers
 
         Args:
             event (WebEvent): generated event
         """
         self.kafka_producer.send(self.topic, event.encode())
-
-    def flush(self):
-        """Send all queued events to Consumers
-        """
-        self.kafka_producer.flush()
