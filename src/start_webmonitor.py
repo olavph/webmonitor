@@ -23,6 +23,7 @@ def signal_handler(sig, frame):
 
 def main():
     signal.signal(signal.SIGINT, signal_handler)
+    print("Starting WebMonitor")
     producer = Producer(TOPIC_NAME)
     monitor = WebMonitor(MONITORED_WEBSITES, LOOP_PERIOD_SECONDS, producer)
     monitor.run()
