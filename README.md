@@ -6,13 +6,26 @@ The topic is also observed and written to a PostgresSQL database.
 
 # Build
 
-A single container needs to be built, the others will be pulled with the compose setup. If you don't have docker, refer to [installing docker](#installing-docker), or skip building and run the Python only command (`run_without_docker.sh`).
+## In container
+
+A single container needs to be built, the others will be pulled with the compose setup. If you don't have docker, refer to [installing docker](#installing-docker).
 
 ```bash
 sudo docker build . --tag webmonitor
 ```
 
+## On host
+
+To execute on the host, without needing docker, set up with:
+
+```bash
+sudo dnf install python python3-pip
+python -m pip install -r requirements.txt
+```
+
 # Run
+
+## In container
 
 To run everything locally, including Kafka and PostgreSQL, execute:
 
@@ -43,7 +56,9 @@ Then execute:
 sudo docker compose -f docker-compose.yml up -d
 ```
 
-To run using Python only, from the host, just substitute the KAFKA and DB variables in `run_without_docker.sh` and run it.
+## On host
+
+To run using Python only, just substitute the KAFKA and DB variables in `run_without_docker.sh` and run it.
 
 ```bash
 ./run_without_docker.sh
