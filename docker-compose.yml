@@ -24,6 +24,7 @@ services:
       KAFKA_SSL_CAFILE:
       KAFKA_SSL_CERTFILE:
       KAFKA_SSL_KEYFILE:
+      DB_NAME: postgres
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres

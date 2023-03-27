@@ -77,6 +77,7 @@ services:
     environment:
       KAFKA_HOST: kafka
       KAFKA_PORT: 29092
+      DB_NAME: postgres
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres

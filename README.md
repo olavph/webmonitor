@@ -29,6 +29,7 @@ KAFKA_SECURITY_PROTOCOL: SSL
 KAFKA_SSL_CAFILE: cert/ca.pem
 KAFKA_SSL_CERTFILE: cert/service.cert
 KAFKA_SSL_KEYFILE: cert/service.key
+DB_NAME: postgres
 DB_HOST: my-host.com
 DB_PORT: 5432
 DB_USER: admin

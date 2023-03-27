@@ -14,10 +14,11 @@ class TestDBWriter(TestCase):
         consumer = []
         event_type = WebEvent
 
-        writer = DBWriter(consumer, sentinel.table_name, event_type, sentinel.host, sentinel.port, sentinel.user)
+        writer = DBWriter(consumer, sentinel.table_name, event_type, sentinel.name, sentinel.host, sentinel.port, sentinel.user)
 
         psycopg2_connect.assert_called_once()
         kwargs = psycopg2_connect.call_args.kwargs
+        self.assertEquals(sentinel.name, kwargs["dbname"])
         self.assertEquals(sentinel.host, kwargs["host"])
         self.assertEquals(sentinel.port, kwargs["port"])
         self.assertEquals(sentinel.user, kwargs["user"])

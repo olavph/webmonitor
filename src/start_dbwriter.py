@@ -20,6 +20,7 @@ KAFKA_SSL_CAFILE=os.getenv("KAFKA_SSL_CAFILE", None)
 KAFKA_SSL_CERTFILE=os.getenv("KAFKA_SSL_CERTFILE", None)
 KAFKA_SSL_KEYFILE=os.getenv("KAFKA_SSL_KEYFILE", None)
 TABLE_NAME = "web_events"
+DB_NAME = os.getenv("DB_NAME", "postgres")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", 5432)
 DB_USER = os.getenv("DB_USER", "postgres")
@@ -41,7 +42,7 @@ def main():
                         ssl_keyfile=KAFKA_SSL_KEYFILE,
     )
     writer = DBWriter(consumer, TABLE_NAME, WebEvent,
-                      DB_HOST, DB_PORT, DB_USER,
+                      DB_NAME, DB_HOST, DB_PORT, DB_USER,
                       password=DB_PASSWORD, sslmode=DB_SSLMODE)
     writer.run()
 
