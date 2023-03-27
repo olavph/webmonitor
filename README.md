@@ -6,7 +6,7 @@ The topic is also observed and written to a PostgresSQL database.
 
 # Build
 
-A single container needs to be built, the others will be pulled with the compose setup. If you don't have docker, refer to [installing docker](#installing-docker).
+A single container needs to be built, the others will be pulled with the compose setup. If you don't have docker, refer to [installing docker](#installing-docker), or skip building and run the Python only command (`run_without_docker.sh`).
 
 ```bash
 sudo docker build . --tag webmonitor
@@ -41,6 +41,12 @@ Then execute:
 
 ```bash
 sudo docker compose -f docker-compose.yml up -d
+```
+
+To run using Python only, from the host, just substitute the KAFKA and DB variables in `run_without_docker.sh` and run it.
+
+```bash
+./run_without_docker.sh
 ```
 
 # Run tests
