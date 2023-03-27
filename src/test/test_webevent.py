@@ -4,7 +4,7 @@ from unittest.mock import sentinel
 from webevent.webevent import WebEvent
 
 
-class TestStringMethods(TestCase):
+class TestWebEvent(TestCase):
 
     def test_webevent_eq_another(self):
         one_event = WebEvent(sentinel.url, 200, 0.1, True, "")

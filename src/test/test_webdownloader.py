@@ -5,8 +5,9 @@ from unittest.mock import sentinel
 from webevent.webdownloader import WebDownloader
 from webevent.webevent import WebEvent
 
+
 @patch('requests.get')
-class TestStringMethods(TestCase):
+class TestWebDownloader(TestCase):
 
     def test_webdownloader_ok_empty_match(self, requests_get):
         expected_event = WebEvent(sentinel.url, 200, 0.1, True, "")

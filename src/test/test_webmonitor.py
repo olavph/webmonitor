@@ -8,7 +8,7 @@ from webevent.webmonitor import WebMonitor
 
 @patch('webevent.webmonitor.WebDownloader')
 @patch('time.sleep')
-class TestStringMethods(TestCase):
+class TestWebMonitor(TestCase):
 
     def test_webmonitor_no_run(self, time_sleep, webdownloader):
         website_configs = []
