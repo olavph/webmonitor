@@ -14,19 +14,20 @@ class TestDBWriter(TestCase):
         consumer = []
         event_type = WebEvent
 
-        writer = DBWriter(consumer, sentinel.host, sentinel.port, sentinel.user, sentinel.db_name, sentinel.table_name, event_type)
+        writer = DBWriter(consumer, sentinel.table_name, event_type, sentinel.host, sentinel.port, sentinel.user)
 
         psycopg2_connect.assert_called_once()
-        args_str = psycopg2_connect.call_args.args[0]
-        self.assertIn(str(sentinel.host), args_str)
-        self.assertIn(str(sentinel.port), args_str)
-        self.assertIn(str(sentinel.user), args_str)
+        kwargs = psycopg2_connect.call_args.kwargs
+        self.assertEquals(sentinel.host, kwargs["host"])
+        self.assertEquals(sentinel.port, kwargs["port"])
+        self.assertEquals(sentinel.user, kwargs["user"])
+
 
     def test_dbwriter_run_creates_table(self, psycopg2_connect):
         cursor = psycopg2_connect.return_value.cursor.return_value
         consumer = []
         event_type = WebEvent
-        writer = DBWriter(consumer, sentinel.host, sentinel.port, sentinel.user, sentinel.db_name, sentinel.table_name, event_type)
+        writer = DBWriter(consumer, sentinel.table_name, event_type, sentinel.host, sentinel.port, sentinel.user)
 
         writer.run()
 
@@ -34,13 +35,14 @@ class TestDBWriter(TestCase):
         create_table_cmd = "CREATE TABLE sentinel.table_name (id serial PRIMARY KEY, url varchar, status_code integer, response_time real, match_found bool, match varchar)"
         cursor.execute.assert_called_once_with(create_table_cmd)
 
+
     def test_dbwriter_run_creates_table_before_inserting(self, psycopg2_connect):
         cursor = psycopg2_connect.return_value.cursor.return_value
         event = mock.MagicMock()
         event.to_tuple.return_value = tuple(range(5))
         consumer = [event]
         event_type = WebEvent
-        writer = DBWriter(consumer, sentinel.host, sentinel.port, sentinel.user, sentinel.db_name, sentinel.table_name, event_type)
+        writer = DBWriter(consumer, sentinel.table_name, event_type, sentinel.host, sentinel.port, sentinel.user)
 
         writer.run()
 
@@ -51,13 +53,14 @@ class TestDBWriter(TestCase):
         insert_cmd = "INSERT INTO sentinel.table_name (url, status_code, response_time, match_found, match) VALUES (%s, %s, %s, %s, %s)"
         cursor.execute.assert_called_with(insert_cmd, tuple(range(5)))
 
+
     def test_dbwriter_run_iterates_until_exhausted(self, psycopg2_connect):
         cursor = psycopg2_connect.return_value.cursor.return_value
         event = mock.MagicMock()
         event.to_tuple.return_value = tuple(range(5))
         consumer = [event, event, event]
         event_type = WebEvent
-        writer = DBWriter(consumer, sentinel.host, sentinel.port, sentinel.user, sentinel.db_name, sentinel.table_name, event_type)
+        writer = DBWriter(consumer, sentinel.table_name, event_type, sentinel.host, sentinel.port, sentinel.user)
 
         writer.run()
 

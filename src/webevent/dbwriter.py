@@ -7,21 +7,22 @@ class DBWriter:
     """DBWriter consumes events and writes them to a PostgreSQL database
     """
 
-    def __init__(self, consumer: Consumer, db_host: str, db_port:int, db_user:str, db_name: str, table_name: str, event_type: type):
+    def __init__(self, consumer: Consumer, table_name: str, event_type: type, db_host: str, db_port:int, db_user:str, **kwargs):
         """Initialize connection to database
+
+        For keyword args, see https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-PARAMKEYWORDS
 
         Args:
             consumer (Consumer): iterable of events
+            table_name (str): table to write events
+            event_type (type): type of events being written, to get database fields information
             db_host (str): host name of PostgreSQL server
             db_port (str): port number of PostgreSQL server
             db_user (str): user name to PostgreSQL server
-            db_name (str): name of the PostgreSQL database
-            table_name (str): table to write events
-            event_type (type): type of events being written, to get database fields information
         """
         self.consumer = consumer
         self._create_queries(table_name, event_type)
-        self.connection = psycopg2.connect(f"host={db_host} port={db_port} user={db_user}")
+        self.connection = psycopg2.connect(host=db_host, port=db_port, user=db_user, **kwargs)
         self.cursor = self.connection.cursor()
 
     def __del__(self):

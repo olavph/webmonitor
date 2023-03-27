@@ -11,6 +11,7 @@ from webevent.consumer import Consumer
 from webevent.dbwriter import DBWriter
 from webevent.webevent import WebEvent
 
+
 TOPIC_NAME = "webmonitor"
 KAFKA_HOST = os.getenv("KAFKA_HOST", "localhost")
 KAFKA_PORT = os.getenv("KAFKA_PORT", 9092)
@@ -18,11 +19,12 @@ KAFKA_SECURITY_PROTOCOL=os.getenv("KAFKA_SECURITY_PROTOCOL", "PLAINTEXT")
 KAFKA_SSL_CAFILE=os.getenv("KAFKA_SSL_CAFILE", None)
 KAFKA_SSL_CERTFILE=os.getenv("KAFKA_SSL_CERTFILE", None)
 KAFKA_SSL_KEYFILE=os.getenv("KAFKA_SSL_KEYFILE", None)
+TABLE_NAME = "web_events"
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", 5432)
-DB_USER = "postgres"
-DB_NAME = "webmonitor"
-TABLE_NAME = "web_events"
+DB_USER = os.getenv("DB_USER", "postgres")
+DB_PASSWORD = os.getenv("DB_PASSWORD", None)
+DB_SSLMODE = os.getenv("DB_SSLMODE", None)
 
 
 def signal_handler(sig, frame):
@@ -38,7 +40,9 @@ def main():
                         ssl_certfile=KAFKA_SSL_CERTFILE,
                         ssl_keyfile=KAFKA_SSL_KEYFILE,
     )
-    writer = DBWriter(consumer, DB_HOST, DB_PORT, DB_USER, DB_NAME, TABLE_NAME, WebEvent)
+    writer = DBWriter(consumer, TABLE_NAME, WebEvent,
+                      DB_HOST, DB_PORT, DB_USER,
+                      password=DB_PASSWORD, sslmode=DB_SSLMODE)
     writer.run()
 
 
