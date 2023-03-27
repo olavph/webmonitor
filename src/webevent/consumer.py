@@ -11,18 +11,20 @@ class Consumer:
     It receives events from a Producer of the same topic.
     """
 
-    def __init__(self, host: str, port: int, topic: str):
+    def __init__(self, topic: str, host: str, port: int, **kwargs):
         """Initialize a KafkaConsumer, waiting for the broker to be available
 
+        For keyword args, see https://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html
+
         Args:
+            topic (str): Kafka topic
             host (str): Kafka broker host name
             port (str): Kafka broker port number
-            topic (str): Kafka topic
         """
         self.kafka_consumer = None
         while self.kafka_consumer is None:
             try:
-                self.kafka_consumer = kafka.KafkaConsumer(topic, bootstrap_servers=f"{host}:{port}")
+                self.kafka_consumer = kafka.KafkaConsumer(topic, bootstrap_servers=f"{host}:{port}", **kwargs)
             except kafka.errors.NoBrokersAvailable:
                 print("No brokers available, retrying")
                 time.sleep(1)

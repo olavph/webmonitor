@@ -9,8 +9,10 @@ class Producer:
     """Producer sends WebEvents to Consumers of the same topic
     """
 
-    def __init__(self, host: str, port: int, topic: str):
+    def __init__(self, topic: str, host: str, port: int, **kwargs):
         """Initialize a KafkaProducer, waiting for the broker to be available
+
+        For keyword args, see https://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html
 
         Args:
             host (str): Kafka broker host name
@@ -22,7 +24,7 @@ class Producer:
         self.kafka_producer = None
         while self.kafka_producer is None:
             try:
-                self.kafka_producer = kafka.KafkaProducer(bootstrap_servers=f"{host}:{port}")
+                self.kafka_producer = kafka.KafkaProducer(bootstrap_servers=f"{host}:{port}", **kwargs)
             except kafka.errors.NoBrokersAvailable:
                 print("No brokers available, retrying")
                 time.sleep(1)

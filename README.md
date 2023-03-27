@@ -20,7 +20,23 @@ To run everything locally, including Kafka and PostgreSQL, execute:
 sudo docker compose -f docker-compose-local.yml up -d
 ```
 
-To run only the WebMonitor, substitute the host and port variables in `docker-compose.yml` and execute:
+To run only the WebMonitor, substitute the KAFKA and DB variables in `docker-compose.yml` with your server settings, for example:
+
+```yaml
+KAFKA_HOST: my-host.com
+KAFKA_PORT: 9092
+KAFKA_SECURITY_PROTOCOL: SSL
+KAFKA_SSL_CAFILE: cert/ca.pem
+KAFKA_SSL_CERTFILE: cert/service.cert
+KAFKA_SSL_KEYFILE: cert/service.key
+DB_HOST: my-host.com
+DB_PORT: 5432
+DB_USER: admin
+DB_PASSWORD: mypass
+DB_SSLMODE: require
+```
+
+Then execute:
 
 ```bash
 sudo docker compose -f docker-compose.yml up -d
