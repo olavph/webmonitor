@@ -9,10 +9,11 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     healthcheck:
-        test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/2181"]
-        interval: 1s
-        timeout: 1s
-        retries: 1
+      # Based on https://stackoverflow.com/a/50055449
+      test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/2181"]
+      interval: 1s
+      timeout: 1s
+      retries: 1
 
   kafka:
     image: confluentinc/cp-kafka:7.3.2
@@ -35,10 +36,11 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     healthcheck:
-        test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/9092"]
-        interval: 1s
-        timeout: 1s
-        retries: 1
+      # Based on https://stackoverflow.com/a/50055449
+      test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/9092"]
+      interval: 1s
+      timeout: 1s
+      retries: 1
 
   postgres:
     image: postgres:14.5
@@ -49,10 +51,11 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: webmonitor
     healthcheck:
-        test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/5432"]
-        interval: 1s
-        timeout: 1s
-        retries: 1
+      # Based on https://stackoverflow.com/a/50055449
+      test: ["CMD", "printf", "", "2>>/dev/null", ">>/dev/tcp/localhost/5432"]
+      interval: 1s
+      timeout: 1s
+      retries: 1
 
   webmonitor:
     image: webmonitor
